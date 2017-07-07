@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/material_textBlack_text"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal|bottom"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_lock_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/padding_8dp"
+            android:drawableTint="@color/white"
+            android:drawableTop="@drawable/ic_lock"
+            android:gravity="center"
+            android:padding="@dimen/padding_8dp"
+            android:text="该操作需验证密码"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/padding_8dp"
+            android:text="密码错误"
+            android:textColor="@color/material_red_500"
+            android:visibility="invisible" />
+
+        <com.uniview.hybirdbase.widget.GestureLock
+            android:id="@+id/gl_lock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp" />
+
+        <TextView
+            android:id="@+id/tv_forget_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_margin"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="忘记密码"
+            android:textColor="@color/material_white" />
+    </LinearLayout>
+</FrameLayout>

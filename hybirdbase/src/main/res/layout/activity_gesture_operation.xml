@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_lock_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/material_red_500"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/padding_8dp"
+        android:text="当前页面操作需要解锁许可!"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/tv_clear_gesture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_margin"
+        android:background="@drawable/bg_btn"
+        android:padding="@dimen/padding_8dp"
+        android:text="清除手势密码"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/tv_set_gesture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_margin"
+        android:background="@drawable/bg_btn"
+        android:padding="@dimen/padding_8dp"
+        android:text="设置手势密码"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/tv_alter_gesture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_margin"
+        android:background="@drawable/bg_btn"
+        android:padding="@dimen/padding_8dp"
+        android:text="修改手势密码"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/tv_lock_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_margin"
+        android:background="@drawable/bg_btn"
+        android:padding="@dimen/padding_8dp"
+        android:text="锁定APP"
+        android:textColor="@color/white" />
+</LinearLayout>

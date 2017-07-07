@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_num_three"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_gesture"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/material_textBlack_secondaryText"
+            android:gravity="center_vertical"
+            android:padding="@dimen/padding_8dp"
+            android:text="3 * 3"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/material_textBlack_dividers" />
+
+        <TextView
+            android:id="@+id/tv_num_fourth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_gesture"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/material_textBlack_secondaryText"
+            android:gravity="center_vertical"
+            android:padding="@dimen/padding_8dp"
+            android:text="4 * 4"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/material_textBlack_dividers" />
+
+        <TextView
+            android:id="@+id/tv_num_five"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_gesture"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/material_textBlack_secondaryText"
+            android:gravity="center_vertical"
+            android:padding="@dimen/padding_8dp"
+            android:text="5 * 5"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/material_textBlack_dividers" />
+
+        <TextView
+            android:id="@+id/tv_num_six"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_gesture"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/material_textBlack_secondaryText"
+            android:gravity="center_vertical"
+            android:padding="@dimen/padding_8dp"
+            android:text="6 * 6"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/material_textBlack_dividers" />
+    </LinearLayout>
+</FrameLayout>

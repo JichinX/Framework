@@ -34,6 +34,7 @@ public class HybirdConst {
 
     public static class PATH {
         public static final String mapPath = "/BaiduMapSDKNew/vmp";
+        public static final String cmapCachePath = "/BaiduMapCache";
         public static String HTML_DIR;
     }
 

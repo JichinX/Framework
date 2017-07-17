@@ -2,14 +2,20 @@ package me.xujichang.hybirdbase.base;
 
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.xujichang.utils.activity.SuperActivity;
 import com.xujichang.utils.bean.AppInfo;
 import com.xujichang.utils.download.DownLoadTool;
+import com.xujichang.utils.tool.LogTool;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 import io.reactivex.Observable;
 import me.xujichang.hybirdbase.api.DownLoadApi;
@@ -47,12 +53,36 @@ public abstract class HybirdBaseActivity extends SuperActivity {
         return false;
     }
 
+    /**
+     * 检查备份文件
+     *
+     * @param fileName
+     * @return
+     */
+    protected boolean checkCacheMapFile(String fileName) {
+        LogTool.d("checkCacheMapFile");
+        File cacheDir = getCacheMapDir();
+        if (null == cacheDir || !cacheDir.exists()) {
+            return false;
+        }
+        File file = new File(cacheDir, fileName);
+        return file.exists();
+    }
+
+    private boolean isCacheFileExits(String fileName) {
+        return false;
+    }
+
+    private boolean isMapCacheDirExits() {
+        return false;
+    }
+
     private File getMapFile(String fileName) {
         File mapDir = getMapDir();
         if (!mapDir.exists()) {
             mapDir.mkdirs();
         }
-        final String downloadPath = mapDir.getAbsolutePath() + File.separator + fileName;
+        String downloadPath = mapDir.getAbsolutePath() + File.separator + fileName;
         File file = new File(downloadPath);
         return file;
     }
@@ -70,6 +100,15 @@ public abstract class HybirdBaseActivity extends SuperActivity {
         return new File(appExternalDir, HybirdConst.PATH.mapPath);
     }
 
+    private File getCacheMapDir() {
+        File cacheMapDir = null;
+        cacheMapDir = Environment.getExternalStorageDirectory();
+        if (cacheMapDir == null) {
+            return null;
+        }
+        return new File(cacheMapDir, HybirdConst.PATH.cmapCachePath);
+    }
+
     public boolean isMapOfflineDirExits() {
         File mapDir = getMapDir();
         return null != mapDir && mapDir.exists();
@@ -80,37 +119,23 @@ public abstract class HybirdBaseActivity extends SuperActivity {
         return mapFile.exists();
     }
 
-    //下载离线地图
-    protected void downloadMapFile(String mapFileName) {
-        File mapFile = getMapFile(mapFileName);
-        if (mapFile.exists()) {
-            mapFile.delete();
-        }
-    }
-
+    /**
+     * 下载离线地图 使用默认的额进度显示
+     *
+     * @param appBaseUrl
+     * @param fileName
+     */
     protected void downloadMapFile(String appBaseUrl, String fileName) {
-        File mapFile = getMapFile(fileName);
-        if (mapFile.exists()) {
-            mapFile.delete();
-        }
-        DownLoadTool downLoadTool = new DownLoadTool
-                .Builder()
-                .fileName(fileName)
-                .showProgress(true)
-                .storeDir(getMapDir())
-                .withContext(this)
-                .build();
-        Observable<ResponseBody> observable = new Retrofit
-                .Builder()
-                .client(new OkHttpClient())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl(appBaseUrl)
-                .build()
-                .create(DownLoadApi.class)
-                .getOfflineMapFile(fileName);
-        downLoadTool.apply(observable);
+        downloadMapFile(appBaseUrl, fileName, null);
     }
 
+    /**
+     * 下载离线地图 使用callback返回进度 供自定义进度显示
+     *
+     * @param appBaseUrl
+     * @param fileName
+     * @param statusCallback
+     */
     protected void downloadMapFile(String appBaseUrl, String fileName, DownLoadTool.DownLoadStatusCallback statusCallback) {
         File mapFile = getMapFile(fileName);
         if (mapFile.exists()) {
@@ -119,7 +144,7 @@ public abstract class HybirdBaseActivity extends SuperActivity {
         DownLoadTool downLoadTool = new DownLoadTool
                 .Builder()
                 .fileName(fileName)
-                .showProgress(false)
+                .showProgress(statusCallback == null)
                 .storeDir(getMapDir())
                 .withContext(this)
                 .build();
@@ -131,8 +156,28 @@ public abstract class HybirdBaseActivity extends SuperActivity {
                 .build()
                 .create(DownLoadApi.class)
                 .getOfflineMapFile(fileName);
+        if (statusCallback == null) {
+            statusCallback = new DownLoadOfflineMapWithCacheCallBack();
+        } else if (!(statusCallback instanceof DownLoadOfflineMapWithCacheCallBack)) {
+            throw new RuntimeException("callback  should extends DownLoadOfflineMapWithCacheCallBack");
+        }
         downLoadTool.apply(observable, statusCallback);
     }
+
+    protected void patchMapFileFromCache(String fileName) {
+        File mapFile = getMapFile(fileName);
+        if (mapFile.exists()) {
+            mapFile.delete();
+        }
+        new CopyFileThread(getCacheMapFile(fileName), mapFile).start();
+        LogTool.d("取本地缓存");
+    }
+
+    private File getCacheMapFile(String fileName) {
+        LogTool.d("getCacheMapFile");
+        return new File(getCacheMapDir(), fileName);
+    }
+
 
     /**
      * 下载APK
@@ -158,4 +203,87 @@ public abstract class HybirdBaseActivity extends SuperActivity {
         downLoadTool.apply(observable);
     }
 
+    public class DownLoadOfflineMapWithCacheCallBack extends DownLoadTool.SimpleDownloadStatusCallBack {
+        @Override
+        public void onComplete(String fileName) {
+            File mapFile = getMapFile(fileName);
+            //下载完成之后 SDk备份一份
+            if (null == mapFile || !mapFile.exists()) {
+                return;
+            }
+            File cacheDir = getCacheMapDir();
+            if (null == cacheDir) {
+                return;
+            }
+            if (!cacheDir.exists()) {
+                cacheDir.mkdir();
+            }
+            String downloadPath = cacheDir.getAbsolutePath() + File.separator + mapFile.getName();
+            File file = new File(downloadPath);
+            new CopyFileThread(mapFile, file).start();
+        }
+    }
+
+    protected boolean checkMapFile(String fileName) {
+        if (checkOfflineMapFile(fileName)) {
+            return true;
+        }
+        if (checkCacheMapFile(fileName)) {
+            patchMapFileFromCache(fileName);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 拷贝文件
+     *
+     * @param oldFile
+     * @param newFile
+     */
+    private void copyFile(File oldFile, File newFile) {
+
+        try {
+            int bytesum = 0;
+            int byteread = 0;
+            if (oldFile.exists()) { //文件存在时
+                InputStream inStream = new FileInputStream(oldFile); //读入原文件
+                FileOutputStream fs = new FileOutputStream(newFile);
+                byte[] buffer = new byte[1444];
+                int length;
+                while ((byteread = inStream.read(buffer)) != -1) {
+                    bytesum += byteread; //字节数 文件大小
+                    fs.write(buffer, 0, byteread);
+                }
+                inStream.close();
+                fs.flush();
+                fs.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private class DownloadHandlerCallback implements Handler.Callback {
+        @Override
+        public boolean handleMessage(Message msg) {
+            LogTool.d("message:------" + msg.toString());
+            return false;
+        }
+    }
+
+    private class CopyFileThread extends Thread {
+        private File oldFile;
+        private File newFile;
+
+        public CopyFileThread(File oldFile, File newFile) {
+            this.oldFile = oldFile;
+            this.newFile = newFile;
+        }
+
+        @Override
+        public void run() {
+            copyFile(oldFile, newFile);
+        }
+    }
 }

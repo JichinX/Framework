@@ -18,7 +18,6 @@ public abstract class HybirdBaseApplication extends Application {
         new XRouter.Builder().basePackage(getBasePackageName()).htmlDir(getWebDir()).withContext(getBaseContext()).build();
         //RetrofitManager
         new RetrofitManager.Builder().baseUrl(getAppBaseUrl()).token(getInitToken()).build();
-
     }
 
     protected abstract String getInitToken();

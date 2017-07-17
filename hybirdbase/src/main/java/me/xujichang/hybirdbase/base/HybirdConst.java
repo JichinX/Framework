@@ -6,9 +6,12 @@ package me.xujichang.hybirdbase.base;
 
 public class HybirdConst {
     public static String BASE_PACKAGE_NAME;
+    public static boolean USE_MAP = false;
+    public static boolean USE_OFFLINE_MAP = false;
 
     public static class FLAG {
         public static final String WEB_URL = "web_url";
+        public static final String LOCATION = "location";
     }
 
     public static class SCHEME {
@@ -30,7 +33,7 @@ public class HybirdConst {
     }
 
     public static class PATH {
-
+        public static final String mapPath = "/BaiduMapSDKNew/vmp";
         public static String HTML_DIR;
     }
 

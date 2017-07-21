@@ -18,9 +18,9 @@ buildscript {
 allprojects {
 
     repositories {
-//        maven {
-//            url '/Volumes/SdCard/Development/maven'
-//        }
+        maven {
+            url '/Volumes/SdCard/Development/maven'
+        }
         google()
         jcenter()
         maven {

@@ -164,6 +164,36 @@ public abstract class HybirdBaseActivity extends SuperActivity {
         downLoadTool.apply(observable, statusCallback);
     }
 
+    /**
+     * 使用自己的链接配置
+     */
+    protected void downloadMapFile(String fileName, Observable<ResponseBody> observable, DownLoadTool.DownLoadStatusCallback statusCallback) {
+        File mapFile = getMapFile(fileName);
+        if (mapFile.exists()) {
+            mapFile.delete();
+        }
+        DownLoadTool downLoadTool = new DownLoadTool
+                .Builder()
+                .fileName(fileName)
+                .showProgress(statusCallback == null)
+                .storeDir(getMapDir())
+                .withContext(this)
+                .build();
+        if (statusCallback == null) {
+            statusCallback = new DownLoadOfflineMapWithCacheCallBack();
+        } else if (!(statusCallback instanceof DownLoadOfflineMapWithCacheCallBack)) {
+            throw new RuntimeException("callback  should extends DownLoadOfflineMapWithCacheCallBack");
+        }
+        downLoadTool.apply(observable, statusCallback);
+    }
+
+    /**
+     * 使用自己的链接配置
+     */
+    protected void downloadMapFile(String fileName, Observable<ResponseBody> observable) {
+        downloadMapFile(fileName, observable, null);
+    }
+
     protected void patchMapFileFromCache(String fileName) {
         File mapFile = getMapFile(fileName);
         if (mapFile.exists()) {

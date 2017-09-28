@@ -3,7 +3,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 group = 'me.xujichang.lib'
-version = '1.0.4'
+version = '1.0.7'
 def packageName = "hybirdbase"
 def pomConfig = {
     licenses {

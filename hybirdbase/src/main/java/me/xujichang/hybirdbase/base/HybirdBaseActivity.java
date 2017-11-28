@@ -5,11 +5,11 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.xujichang.utils.activity.SuperActivity;
 import com.xujichang.utils.bean.AppInfo;
-import com.xujichang.utils.download.DownLoadTool;
 import com.xujichang.utils.tool.LogTool;
 
 import java.io.File;
@@ -19,6 +19,8 @@ import java.io.InputStream;
 
 import io.reactivex.Observable;
 import me.xujichang.hybirdbase.api.DownLoadApi;
+import me.xujichang.hybirdbase.temp.DownLoadToolTemp;
+import me.xujichang.util.download.DownLoadTool;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
@@ -29,6 +31,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
  */
 
 public abstract class HybirdBaseActivity extends SuperActivity {
+
+    private long startTime;
 
     protected void showAlertDialog(@NonNull String msg, MaterialDialog.SingleButtonCallback callback) {
         new MaterialDialog.Builder(this)
@@ -215,7 +219,7 @@ public abstract class HybirdBaseActivity extends SuperActivity {
      * @param appInfo
      */
     protected void downloadApkFile(String baseurl, AppInfo appInfo) {
-        DownLoadTool downLoadTool = new DownLoadTool
+        DownLoadToolTemp downLoadTool = new DownLoadToolTemp
                 .Builder()
                 .fileName(appInfo.getPackageName() + ".apk")
                 .showProgress(true)
@@ -315,5 +319,39 @@ public abstract class HybirdBaseActivity extends SuperActivity {
         public void run() {
             copyFile(oldFile, newFile);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        String className = getClass().getSimpleName();
+        if (hideSoftKeyBoard() || hideKeyBoardForDialog()) {
+            return;
+        }
+        if (getMainActivityName().equals(className)) {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - startTime > getActivityExitDuration()) {
+                showToastWithAction("再次点击将退出程序", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onAppExit();
+                    }
+                }, "退出");
+                startTime = currentTime;
+            } else {
+                onAppExit();
+            }
+            return;
+        }
+        onParentBackPressed();
+    }
+
+    protected void onAppExit() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+                System.gc();
+            }
+        }, 500);
     }
 }

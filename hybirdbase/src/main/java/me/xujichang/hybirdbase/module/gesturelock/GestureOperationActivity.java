@@ -193,6 +193,7 @@ public class GestureOperationActivity extends HybirdBaseActivity {
             case GestureLockActivity.TYPE_ALTER:
                 toLockActivity(GestureLockActivity.TYPE_ALTER, -1);
                 break;
+            default:
         }
     }
 

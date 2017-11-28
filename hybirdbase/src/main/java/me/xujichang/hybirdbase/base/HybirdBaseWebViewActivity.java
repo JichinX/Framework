@@ -24,13 +24,12 @@ import com.github.lzyzsd.jsbridge.BridgeHandler;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.jsbridge.BridgeWebViewClient;
 import com.github.lzyzsd.jsbridge.CallBackFunction;
-
-import com.xujichang.utils.activity.SuperActivity;
 import com.xujichang.utils.tool.LogTool;
 
 import me.xujichang.hybirdbase.R;
 import me.xujichang.hybirdbase.interfaces.JSBridgeBaseListener;
 import me.xujichang.hybirdbase.utils.JSBridgeManager;
+import me.xujichang.util.activity.SuperActivity;
 
 /**
  * WebView 的基本Activity
@@ -39,8 +38,15 @@ import me.xujichang.hybirdbase.utils.JSBridgeManager;
  */
 
 public abstract class HybirdBaseWebViewActivity extends SuperActivity implements JSBridgeBaseListener {
+    /**
+     * WebView对象
+     */
     private BridgeWebView webView;
+    /**
+     * 加载的URl
+     */
     private String url;
+
     private MaterialDialog progressDialog;
     private ProgressBar progressBar;
 

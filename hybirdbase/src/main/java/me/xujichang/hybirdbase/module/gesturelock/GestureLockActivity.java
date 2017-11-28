@@ -1,11 +1,11 @@
 package me.xujichang.hybirdbase.module.gesturelock;
 
-import android.arch.lifecycle.LifecycleActivity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
@@ -17,7 +17,7 @@ import me.xujichang.hybirdbase.module.gesturelock.fragment.GestureUnlockFragment
  * APP手势锁
  * Created by xjc on 2017/6/27.
  */
-public class GestureLockActivity extends LifecycleActivity {
+public class GestureLockActivity extends AppCompatActivity {
 
     public static final String GESTURE_FLAG = "gesture";
     //设置 密码
@@ -90,6 +90,7 @@ public class GestureLockActivity extends LifecycleActivity {
                 unLockFragment.setArguments(bundle);
                 transaction.replace(fragmentContainer.getId(), unLockFragment);
                 break;
+            default:
         }
         transaction.commitAllowingStateLoss();
     }

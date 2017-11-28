@@ -1,10 +1,10 @@
 package me.xujichang.hybirdbase.base;
 
-import android.arch.lifecycle.LifecycleFragment;
+import android.support.v4.app.Fragment;
 
 /**
  * Created by xjc on 2017/5/23.
  */
 
-public class BaseFragment extends LifecycleFragment {
+public class BaseFragment extends Fragment {
 }

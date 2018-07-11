@@ -110,7 +110,7 @@ public class XRouter {
                 throw new IllegalStateException("activity(" + className + ") 不存在");
             }
             createData(intent, uri.getQuery());
-        } else if (scheme.equals(HybirdConst.SCHEME.HTTP_SCHEME)) {
+        } else if (scheme.startsWith(HybirdConst.SCHEME.HTTP_SCHEME)) {
             intent.setClass(context, webClass);
             intent.putExtra(HybirdConst.FLAG.WEB_URL, uri.toString());
         }

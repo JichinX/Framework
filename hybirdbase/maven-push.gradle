@@ -24,9 +24,9 @@ artifacts {
 uploadArchives {
     repositories {
         mavenDeployer {
-            String selfPath = "/Volumes/SdCard/Development/maven"
+            String selfPath = "/Volumes/SdCard/Development/environment/.m2/localmaven"
             repository(url: "file://" + selfPath)
-            pom.version = '1.1.0'
+            pom.version = '1.1.6'
             pom.groupId = 'me.xujichang.lib'
             pom.artifactId = 'hybirdbase'
 

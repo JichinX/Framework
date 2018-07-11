@@ -8,9 +8,6 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.xujichang.utils.activity.SuperActivity;
-import com.xujichang.utils.bean.AppInfo;
-import com.xujichang.utils.tool.LogTool;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,7 +17,10 @@ import java.io.InputStream;
 import io.reactivex.Observable;
 import me.xujichang.hybirdbase.api.DownLoadApi;
 import me.xujichang.hybirdbase.temp.DownLoadToolTemp;
+import me.xujichang.util.activity.SuperActivity;
+import me.xujichang.util.bean.AppInfo;
 import me.xujichang.util.download.DownLoadTool;
+import me.xujichang.util.tool.LogTool;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
@@ -322,29 +322,6 @@ public abstract class HybirdBaseActivity extends SuperActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        String className = getClass().getSimpleName();
-        if (hideSoftKeyBoard() || hideKeyBoardForDialog()) {
-            return;
-        }
-        if (getMainActivityName().equals(className)) {
-            long currentTime = System.currentTimeMillis();
-            if (currentTime - startTime > getActivityExitDuration()) {
-                showToastWithAction("再次点击将退出程序", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onAppExit();
-                    }
-                }, "退出");
-                startTime = currentTime;
-            } else {
-                onAppExit();
-            }
-            return;
-        }
-        onParentBackPressed();
-    }
-
     protected void onAppExit() {
         new Handler().postDelayed(new Runnable() {
             @Override

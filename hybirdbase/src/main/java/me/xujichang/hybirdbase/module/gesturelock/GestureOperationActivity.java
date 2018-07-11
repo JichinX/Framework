@@ -223,8 +223,4 @@ public class GestureOperationActivity extends HybirdBaseActivity {
         return 0;
     }
 
-    @Override
-    protected String getMainActivityName() {
-        return "";
-    }
 }

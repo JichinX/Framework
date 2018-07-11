@@ -12,14 +12,17 @@ import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 import com.github.lzyzsd.jsbridge.BridgeWebView;
+import com.github.lzyzsd.jsbridge.BridgeWebViewClient;
 import com.github.lzyzsd.jsbridge.CallBackFunction;
 
 import me.xujichang.hybirdbase.R;
 import me.xujichang.hybirdbase.module.web.WebDataParse;
+import me.xujichang.hybirdbase.module.web.WebSettingConst;
 import me.xujichang.hybirdbase.module.web.client.SelfWebChromeClient;
 import me.xujichang.hybirdbase.module.web.client.SelfWebViewClient;
 import me.xujichang.hybirdbase.module.web.handler.DefaultWebHandler;
@@ -91,6 +94,18 @@ public abstract class HybirdBaseWebView extends SuperActivity implements IWebBas
         mWebView.setWebViewClient(mWebClient);
     }
 
+    public void setWebClient(SelfWebViewClient webClient) {
+        mWebClient = webClient;
+    }
+
+    public void setWebClient(SelfWebChromeClient webClient) {
+        mChromeClient = webClient;
+    }
+
+    public void callJsHandler(String name, String data, CallBackFunction callBackFunction) {
+        mWebView.callHandler(name, data, callBackFunction);
+    }
+
     /**
      * 初始化 View
      */
@@ -100,8 +115,19 @@ public abstract class HybirdBaseWebView extends SuperActivity implements IWebBas
         mProgressBar = findViewById(R.id.pb_loading_status);
         mLoading = new ProgressLoading(mProgressBar);
         mParseData = new WebDataParse();
-        new DefaultWebHandler(mWebView).addJsCallBack(this);
+        initWebHandler();
+        initWebSetting(mWebView.getSettings());
     }
+
+    protected void initWebSetting(WebSettings settings) {
+    }
+
+    private void initWebHandler() {
+        new DefaultWebHandler(mWebView, this);
+        initExtHandler(this);
+    }
+
+    protected abstract void initExtHandler(IWebJsCallBack callBack);
 
     /**
      * 加载Url
@@ -115,7 +141,7 @@ public abstract class HybirdBaseWebView extends SuperActivity implements IWebBas
     /**
      * 初始化 ActionBar
      */
-    private void initActionBar() {
+    protected void initActionBar() {
         showBackArrow();
         setActionBarTitle(url);
         setRightImg(R.drawable.ic_refresh);
@@ -284,5 +310,19 @@ public abstract class HybirdBaseWebView extends SuperActivity implements IWebBas
 
     public IWebParseData getParseData() {
         return mParseData;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mWebView.onPause();
+        mWebView.pauseTimers();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mWebView.onResume();
+        mWebView.resumeTimers();
     }
 }

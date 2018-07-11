@@ -30,7 +30,7 @@ public class ProgressLoading implements IWebLoading {
     @Override
     public void stop() {
         if (null != mProgressBar) {
-            mProgressBar.setVisibility(View.INVISIBLE);
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 

@@ -1,10 +1,6 @@
 package me.xujichang.hybirdbase.module.web.handler;
 
-import android.support.annotation.NonNull;
-
-import com.github.lzyzsd.jsbridge.BridgeHandler;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
-import com.github.lzyzsd.jsbridge.CallBackFunction;
 
 import me.xujichang.hybirdbase.module.web.interfaces.IWebJsCallBack;
 
@@ -16,15 +12,16 @@ import me.xujichang.hybirdbase.module.web.interfaces.IWebJsCallBack;
  */
 
 public class DefaultWebHandler extends WebHandler {
-
     public DefaultWebHandler(BridgeWebView webView) {
         super(webView);
     }
 
-    @Override
-    public void addJsCallBack(@NonNull final IWebJsCallBack callBack) {
-        //设置默认
-        registerNativeHandler(null, callBack);
+    public DefaultWebHandler(BridgeWebView webView, IWebJsCallBack callBack) {
+        super(webView, callBack);
     }
 
+    @Override
+    protected void patchWebHandler() {
+        registerNativeHandler(null);
+    }
 }

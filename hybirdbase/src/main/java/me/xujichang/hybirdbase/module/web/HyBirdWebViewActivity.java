@@ -1,5 +1,7 @@
 package me.xujichang.hybirdbase.module.web;
 
+import android.webkit.WebSettings;
+
 import me.xujichang.hybirdbase.base.HybirdBaseWebView;
 
 /**
@@ -9,14 +11,10 @@ import me.xujichang.hybirdbase.base.HybirdBaseWebView;
  *         Created on 2017/11/25 17:03.
  */
 
-public class HyBirdWebViewActivity extends HybirdBaseWebView {
+public abstract class HyBirdWebViewActivity extends HybirdBaseWebView {
     @Override
-    protected long getActivityExitDuration() {
-        return 1000;
+    protected void initWebSetting(WebSettings settings) {
+        WebSettingConst.patchDefaultSetting(settings);
     }
 
-    @Override
-    protected String getMainActivityName() {
-        return "MainActivity";
-    }
 }
